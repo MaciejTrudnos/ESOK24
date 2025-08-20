@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  esok-chatbot:
+    image: esok-chatbot
+    build: ./
+    container_name: esok-chatbot-container
+    ports:
+      - 5000:5000
+    environment:
+      TZ: Europe/Warsaw
+    restart: always
+
+networks:
+  default:
+    name: esok-network
+    external: true

@@ -1,0 +1,45 @@
+version: '3.4'
+
+services:
+  esok-api:
+    image: esok-api
+    build: ./esok.api
+    container_name: esok-api-container
+    ports:
+      - 5001:80
+    environment:
+      TZ: Europe/Warsaw
+    restart: always
+  esok-web:
+    image: esok-web
+    build: ./esok.web
+    container_name: esok-web-container
+    ports:
+      - 8080:80
+    environment:
+      TZ: Europe/Warsaw
+    restart: always
+  esok-nginx:
+    image: nginx
+    container_name: esok-nginx-container
+    volumes:
+      - nginx-volume:/etc/nginx
+    ports:
+      - 443:443
+      - 80:80
+    environment:
+      TZ: Europe/Warsaw
+    restart: always
+
+networks:
+  default:
+    name: esok-network
+    external: true
+
+volumes:
+  nginx-volume:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/ubuntu/esok24/nginx

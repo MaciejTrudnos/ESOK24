@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  esok-api:
+    image: esok-api
+    build: ./esok.api
+    container_name: esok-api-container
+    ports:
+      - 5001:443
+    environment:
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
+  esok-web:
+    image: esok-web
+    build: ./esok.web
+    container_name: esok-web-container
+    volumes:
+      - nginx-volume:/etc/nginx
+    ports:
+      - 443:443
+
+networks:
+  default:
+    name: esok-network
+    external: true
+    
+volumes:
+  nginx-volume:
+    driver: local
+    driver_opts:
+       o: bind
+       type: none
+       device: C:/Users/Maciej/Desktop/1234
